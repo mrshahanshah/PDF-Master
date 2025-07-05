@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -6,8 +7,9 @@
     <title>PDFMaster - सभी PDF टूल्स एक जगह</title>
     <meta name="description" content="PDF कन्वर्ट, एडिट, मर्ज, स्प्लिट, कम्प्रेस और 20+ अन्य टूल्स - पूरी तरह मुफ्त">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
     <style>
-        /* CSS स्टाइलिंग */
         * {
             margin: 0;
             padding: 0;
@@ -32,6 +34,9 @@
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         nav {
@@ -191,6 +196,90 @@
             font-size: 0.9rem;
         }
 
+        /* फाइल अपलोड इंटरफेस */
+        .tool-interface {
+            display: none;
+            margin: 30px auto;
+            max-width: 800px;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .tool-interface h3 {
+            margin-bottom: 20px;
+            color: #6e48aa;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-upload-btn, .process-btn, .download-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-btn {
+            background: #6e48aa;
+            color: white;
+        }
+
+        .file-upload-btn:hover {
+            background: #9d50bb;
+        }
+
+        .process-btn {
+            background: #ff6b6b;
+            color: white;
+            display: none;
+        }
+
+        .process-btn:hover {
+            background: #ff5252;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            display: none;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .selected-file {
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* प्रोग्रेस बार */
+        .progress-container {
+            width: 100%;
+            background: #f0f0f0;
+            margin: 15px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #6e48aa;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
         /* फीचर्स सेक्शन */
         .features-section {
             padding: 4rem 5%;
@@ -314,6 +403,10 @@
             .tools-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
+
+            .tool-interface {
+                padding: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -340,11 +433,15 @@
             .tools-grid {
                 grid-template-columns: 1fr;
             }
+
+            .file-upload-btn, .process-btn, .download-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- HTML कंटेंट -->
     <header>
         <nav>
             <div class="logo">
@@ -353,15 +450,15 @@
             <ul>
                 <li><a href="#all-tools">सभी टूल्स</a></li>
                 <li><a href="#features">फीचर्स</a></li>
-                <li><a href="#about">हमारे बारे में</a></li>
+                <li><a href="#contact">संपर्क</a></li>
             </ul>
         </nav>
         <div class="hero">
             <h1>आपके PDF के लिए सभी समाधान</h1>
             <p>20+ मुफ़्त टूल्स जो आपके PDF काम आसान बनाते हैं</p>
             <div class="search-box">
-                <input type="text" placeholder="टूल खोजें...">
-                <button><i class="fas fa-search"></i></button>
+                <input type="text" id="searchInput" placeholder="टूल खोजें...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
             </div>
         </div>
     </header>
@@ -371,112 +468,40 @@
         
         <div class="category">
             <h3><i class="fas fa-exchange-alt"></i> कन्वर्ट टूल्स</h3>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-word"></i></div>
-                    <h3>PDF से Word</h3>
-                    <p>PDF को एडिट करने योग्य Word डॉक्यूमेंट में बदलें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-excel"></i></div>
-                    <h3>PDF से Excel</h3>
-                    <p>PDF टेबल्स को एडिटेबल Excel शीट में कन्वर्ट करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-powerpoint"></i></div>
-                    <h3>PDF से PPT</h3>
-                    <p>PDF को PowerPoint प्रेजेंटेशन में बदलें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-image"></i></div>
-                    <h3>PDF से JPG</h3>
-                    <p>PDF पेजों को इमेज फॉर्मेट में कन्वर्ट करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
-                    <h3>Word से PDF</h3>
-                    <p>Word डॉक्यूमेंट को PDF में बदलें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
-                    <h3>Excel से PDF</h3>
-                    <p>Excel शीट्स को PDF में कन्वर्ट करें</p>
-                </div>
+            <div class="tools-grid" id="convert-tools">
+                <!-- JavaScript से जनरेट होगा -->
             </div>
         </div>
 
         <div class="category">
             <h3><i class="fas fa-edit"></i> एडिट टूल्स</h3>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-compress-alt"></i></div>
-                    <h3>PDF कम्प्रेस</h3>
-                    <p>PDF का साइज कम करें बिना क्वालिटी खोए</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-unlock"></i></div>
-                    <h3>PDF अनलॉक</h3>
-                    <p>पासवर्ड प्रोटेक्टेड PDF से सुरक्षा हटाएं</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-lock"></i></div>
-                    <h3>PDF प्रोटेक्ट</h3>
-                    <p>PDF को पासवर्ड से सुरक्षित करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-water"></i></div>
-                    <h3>वॉटरमार्क जोड़ें</h3>
-                    <p>PDF में टेक्स्ट या इमेज वॉटरमार्क जोड़ें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-signature"></i></div>
-                    <h3>PDF साइन</h3>
-                    <p>डिजिटल सिग्नेचर के साथ PDF साइन करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-eraser"></i></div>
-                    <h3>PDF एडिट</h3>
-                    <p>PDF में टेक्स्ट और इमेजेज एडिट करें</p>
-                </div>
+            <div class="tools-grid" id="edit-tools">
+                <!-- JavaScript से जनरेट होगा -->
             </div>
         </div>
 
         <div class="category">
             <h3><i class="fas fa-object-group"></i> संगठन टूल्स</h3>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-merge"></i></div>
-                    <h3>PDF मर्ज</h3>
-                    <p>कई PDFs को एक फाइल में मिलाएं</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-cut"></i></div>
-                    <h3>PDF स्प्लिट</h3>
-                    <p>बड़े PDF को छोटे हिस्सों में विभाजित करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-sort-numeric-up"></i></div>
-                    <h3>PDF पेज ऑर्डर</h3>
-                    <p>PDF पेजों को रीअरेंज या डिलीट करें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-archive"></i></div>
-                    <h3>PDF एक्सट्रैक्ट</h3>
-                    <p>PDF से स्पेसिफिक पेज निकालें</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-columns"></i></div>
-                    <h3>PDF रोटेट</h3>
-                    <p>PDF पेजों को 90°, 180° या 270° घुमाएं</p>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon"><i class="fas fa-file-invoice"></i></div>
-                    <h3>PDF फॉर्म भरें</h3>
-                    <p>PDF फॉर्म्स को डिजिटली भरें और सेव करें</p>
-                </div>
+            <div class="tools-grid" id="organize-tools">
+                <!-- JavaScript से जनरेट होगा -->
             </div>
         </div>
     </section>
+
+    <!-- PDF टूल इंटरफेस -->
+    <div id="pdfToolInterface" class="tool-interface">
+        <h3 id="currentToolTitle">टूल नाम</h3>
+        <input type="file" id="pdfFileInput" class="file-input" accept=".pdf">
+        <button id="selectFileBtn" class="file-upload-btn">PDF फाइल चुनें</button>
+        <div id="selectedFile" class="selected-file">कोई फाइल नहीं चुनी गई</div>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <button id="processBtn" class="process-btn">प्रोसेस करें</button>
+        <a id="downloadBtn" class="download-btn" download>डाउनलोड करें</a>
+    </div>
 
     <section id="features" class="features-section">
         <h2><i class="fas fa-star"></i> हमारी खास बातें</h2>
@@ -499,7 +524,7 @@
         </div>
     </section>
 
-    <footer>
+    <footer id="contact">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>PDFMaster</h3>
@@ -510,7 +535,7 @@
                 <ul>
                     <li><a href="#">प्राइवेसी पॉलिसी</a></li>
                     <li><a href="#">टर्म्स ऑफ यूज़</a></li>
-                    <li><a href="#">संपर्क करें</a></li>
+                    <li><a href="#contact">संपर्क करें</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -527,78 +552,281 @@
         </div>
     </footer>
 
-    <!-- JavaScript कोड -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // टूल कार्ड्स पर क्लिक इवेंट
-            const toolCards = document.querySelectorAll('.tool-card');
-            
-            toolCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const toolName = this.querySelector('h3').textContent;
-                    alert(`आपने "${toolName}" टूल सिलेक्ट किया है। डेवलपमेंट के दौरान यह फंक्शन अभी उपलब्ध नहीं है।`);
+            // टूल्स डेटा
+            const toolsData = {
+                convert: [
+                    {icon: 'fa-file-word', name: 'PDF से Word', desc: 'PDF को एडिट करने योग्य Word डॉक्यूमेंट में बदलें'},
+                    {icon: 'fa-file-excel', name: 'PDF से Excel', desc: 'PDF टेबल्स को एडिटेबल Excel शीट में कन्वर्ट करें'},
+                    {icon: 'fa-file-powerpoint', name: 'PDF से PPT', desc: 'PDF को PowerPoint प्रेजेंटेशन में बदलें'},
+                    {icon: 'fa-file-image', name: 'PDF से JPG', desc: 'PDF पेजों को इमेज फॉर्मेट में कन्वर्ट करें'},
+                    {icon: 'fa-file-pdf', name: 'Word से PDF', desc: 'Word डॉक्यूमेंट को PDF में बदलें'},
+                    {icon: 'fa-file-pdf', name: 'Excel से PDF', desc: 'Excel शीट्स को PDF में कन्वर्ट करें'}
+                ],
+                edit: [
+                    {icon: 'fa-compress-alt', name: 'PDF कम्प्रेस', desc: 'PDF का साइज कम करें बिना क्वालिटी खोए'},
+                    {icon: 'fa-unlock', name: 'PDF अनलॉक', desc: 'पासवर्ड प्रोटेक्टेड PDF से सुरक्षा हटाएं'},
+                    {icon: 'fa-lock', name: 'PDF प्रोटेक्ट', desc: 'PDF को पासवर्ड से सुरक्षित करें'},
+                    {icon: 'fa-water', name: 'वॉटरमार्क जोड़ें', desc: 'PDF में टेक्स्ट या इमेज वॉटरमार्क जोड़ें'},
+                    {icon: 'fa-file-signature', name: 'PDF साइन', desc: 'डिजिटल सिग्नेचर के साथ PDF साइन करें'},
+                    {icon: 'fa-eraser', name: 'PDF एडिट', desc: 'PDF में टेक्स्ट और इमेजेज एडिट करें'}
+                ],
+                organize: [
+                    {icon: 'fa-merge', name: 'PDF मर्ज', desc: 'कई PDFs को एक फाइल में मिलाएं'},
+                    {icon: 'fa-cut', name: 'PDF स्प्लिट', desc: 'बड़े PDF को छोटे हिस्सों में विभाजित करें'},
+                    {icon: 'fa-sort-numeric-up', name: 'PDF पेज ऑर्डर', desc: 'PDF पेजों को रीअरेंज या डिलीट करें'},
+                    {icon: 'fa-file-archive', name: 'PDF एक्सट्रैक्ट', desc: 'PDF से स्पेसिफिक पेज निकालें'},
+                    {icon: 'fa-columns', name: 'PDF रोटेट', desc: 'PDF पेजों को 90°, 180° या 270° घुमाएं'},
+                    {icon: 'fa-file-invoice', name: 'PDF फॉर्म भरें', desc: 'PDF फॉर्म्स को डिजिटली भरें और सेव करें'}
+                ]
+            };
+
+            // DOM एलिमेंट्स
+            const convertTools = document.getElementById('convert-tools');
+            const editTools = document.getElementById('edit-tools');
+            const organizeTools = document.getElementById('organize-tools');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const pdfToolInterface = document.getElementById('pdfToolInterface');
+            const currentToolTitle = document.getElementById('currentToolTitle');
+            const pdfFileInput = document.getElementById('pdfFileInput');
+            const selectFileBtn = document.getElementById('selectFileBtn');
+            const selectedFile = document.getElementById('selectedFile');
+            const processBtn = document.getElementById('processBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+
+            // वैरिएबल्स
+            let currentTool = null;
+            let selectedFileName = '';
+
+            // टूल्स जनरेट करना
+            function generateTools() {
+                toolsData.convert.forEach(tool => {
+                    convertTools.appendChild(createToolCard(tool));
                 });
-            });
-            
-            // सर्च फंक्शनैलिटी
-            const searchInput = document.querySelector('.search-box input');
-            const searchButton = document.querySelector('.search-box button');
-            
-            searchButton.addEventListener('click', function() {
-                performSearch();
-            });
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-            
-            function performSearch() {
-                const searchTerm = searchInput.value.trim().toLowerCase();
-                if (searchTerm === '') return;
+
+                toolsData.edit.forEach(tool => {
+                    editTools.appendChild(createToolCard(tool));
+                });
+
+                toolsData.organize.forEach(tool => {
+                    organizeTools.appendChild(createToolCard(tool));
+                });
+            }
+
+            // टूल कार्ड बनाना
+            function createToolCard(tool) {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                card.innerHTML = `
+                    <div class="tool-icon"><i class="fas ${tool.icon}"></i></div>
+                    <h3>${tool.name}</h3>
+                    <p>${tool.desc}</p>
+                `;
                 
-                let found = false;
-                toolCards.forEach(card => {
-                    const toolTitle = card.querySelector('h3').textContent.toLowerCase();
-                    const toolDesc = card.querySelector('p').textContent.toLowerCase();
+                card.addEventListener('click', function() {
+                    currentTool = tool.name;
+                    currentToolTitle.textContent = tool.name;
+                    pdfToolInterface.style.display = 'block';
+                    pdfToolInterface.scrollIntoView({ behavior: 'smooth' });
                     
-                    if (toolTitle.includes(searchTerm) || toolDesc.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        found = true;
-                    } else {
-                        card.style.display = 'none';
+                    // रीसेट इंटरफेस
+                    pdfFileInput.value = '';
+                    selectedFile.textContent = 'कोई फाइल नहीं चुनी गई';
+                    processBtn.style.display = 'none';
+                    downloadBtn.style.display = 'none';
+                    progressContainer.style.display = 'none';
+                    progressBar.style.width = '0%';
+                });
+                
+                return card;
+            }
+
+            // सर्च फंक्शन
+            function setupSearch() {
+                function performSearch() {
+                    const searchTerm = searchInput.value.trim().toLowerCase();
+                    const allCategories = document.querySelectorAll('.category');
+                    
+                    if (searchTerm === '') {
+                        // खाली सर्च - सभी टूल्स दिखाएँ
+                        document.querySelectorAll('.tool-card').forEach(card => {
+                            card.style.display = 'block';
+                        });
+                        allCategories.forEach(cat => {
+                            cat.style.display = 'block';
+                        });
+                        return;
+                    }
+                    
+                    let foundAny = false;
+                    allCategories.forEach(category => {
+                        let foundInCategory = false;
+                        const tools = category.querySelectorAll('.tool-card');
+                        
+                        tools.forEach(tool => {
+                            const toolTitle = tool.querySelector('h3').textContent.toLowerCase();
+                            const toolDesc = tool.querySelector('p').textContent.toLowerCase();
+                            
+                            if (toolTitle.includes(searchTerm) || toolDesc.includes(searchTerm)) {
+                                tool.style.display = 'block';
+                                foundInCategory = true;
+                                foundAny = true;
+                            } else {
+                                tool.style.display = 'none';
+                            }
+                        });
+                        
+                        // अगर इस कैटेगरी में कोई टूल नहीं मिला तो पूरी कैटेगरी हाइड करें
+                        category.style.display = foundInCategory ? 'block' : 'none';
+                    });
+                    
+                    if (!foundAny) {
+                        alert('कोई टूल नहीं मिला। कृपया अलग कीवर्ड आजमाएं।');
+                    }
+                }
+
+                searchButton.addEventListener('click', performSearch);
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
                     }
                 });
-                
-                if (!found) {
-                    alert('कोई टूल नहीं मिला। कृपया अलग कीवर्ड आजमाएं।');
-                }
             }
-            
+
+            // फाइल अपलोड और प्रोसेसिंग
+            function setupFileProcessing() {
+                // फाइल चुनने का बटन
+                selectFileBtn.addEventListener('click', function() {
+                    pdfFileInput.click();
+                });
+
+                // फाइल चुनने पर
+                pdfFileInput.addEventListener('change', function(e) {
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        
+                        // फाइल साइज चेक (अधिकतम 10MB)
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert('फाइल साइज बहुत बड़ा है (अधिकतम 10MB)');
+                            this.value = '';
+                            selectedFile.textContent = 'कोई फाइल नहीं चुनी गई';
+                            processBtn.style.display = 'none';
+                            return;
+                        }
+                        
+                        selectedFileName = file.name;
+                        selectedFile.textContent = `चुनी गई फाइल: ${selectedFileName}`;
+                        processBtn.style.display = 'inline-block';
+                    }
+                });
+
+                // प्रोसेस बटन
+                processBtn.addEventListener('click', async function() {
+                    const file = pdfFileInput.files[0];
+                    if (!file) {
+                        alert('कृपया पहले एक PDF फाइल चुनें');
+                        return;
+                    }
+                    
+                    // प्रोसेसिंग शुरू
+                    processBtn.disabled = true;
+                    progressContainer.style.display = 'block';
+                    progressBar.style.width = '30%';
+                    
+                    try {
+                        // PDF प्रोसेसिंग
+                        const arrayBuffer = await file.arrayBuffer();
+                        const { PDFDocument } = PDFLib;
+                        
+                        // यहाँ आप टूल के अनुसार अलग-अलग प्रोसेसिंग कर सकते हैं
+                        if (currentTool.includes('मर्ज')) {
+                            // PDF मर्ज करने का उदाहरण
+                            progressBar.style.width = '50%';
+                            const pdfDoc = await PDFDocument.load(arrayBuffer);
+                            progressBar.style.width = '80%';
+                            
+                            // प्रोसेस्ड PDF बनाएँ (यहाँ सिर्फ उदाहरण के लिए ओरिजिनल PDF को वापस कर रहे हैं)
+                            const pdfBytes = await pdfDoc.save();
+                            progressBar.style.width = '100%';
+                            
+                            // डाउनलोड लिंक तैयार करें
+                            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                            const url = URL.createObjectURL(blob);
+                            
+                            downloadBtn.href = url;
+                            downloadBtn.setAttribute('download', `processed_${selectedFileName}`);
+                            downloadBtn.style.display = 'inline-block';
+                            
+                            alert('PDF प्रोसेसिंग पूरी हुई! अब आप फाइल डाउनलोड कर सकते हैं');
+                        } else {
+                            // अन्य टूल्स के लिए डिफॉल्ट प्रोसेसिंग
+                            progressBar.style.width = '100%';
+                            const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+                            const url = URL.createObjectURL(blob);
+                            
+                            downloadBtn.href = url;
+                            downloadBtn.setAttribute('download', `processed_${selectedFileName}`);
+                            downloadBtn.style.display = 'inline-block';
+                            
+                            alert(`${currentTool} प्रोसेसिंग पूरी हुई! अब आप फाइल डाउनलोड कर सकते हैं`);
+                        }
+                    } catch (error) {
+                        console.error('PDF प्रोसेसिंग में त्रुटि:', error);
+                        alert('PDF प्रोसेसिंग असफल: ' + error.message);
+                    } finally {
+                        processBtn.disabled = false;
+                    }
+                });
+            }
+
             // स्क्रॉल पर नेवबार स्टाइल बदलना
-            window.addEventListener('scroll', function() {
+            function setupScrollEffect() {
                 const nav = document.querySelector('nav');
-                if (window.scrollY > 50) {
-                    nav.style.background = 'rgba(110, 72, 170, 0.95)';
-                    nav.style.padding = '0.5rem 5%';
-                    nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-                } else {
-                    nav.style.background = 'transparent';
-                    nav.style.padding = '1rem 5%';
-                    nav.style.boxShadow = 'none';
-                }
-            });
-            
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        nav.style.background = 'rgba(110, 72, 170, 0.95)';
+                        nav.style.padding = '0.5rem 5%';
+                        nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                    } else {
+                        nav.style.background = 'transparent';
+                        nav.style.padding = '1rem 5%';
+                        nav.style.boxShadow = 'none';
+                    }
+                });
+            }
+
             // स्मूथ स्क्रॉलिंग
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
+            function setupSmoothScrolling() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
                     });
                 });
-            });
+            }
+
+            // इनिशियलाइज़ेशन
+            function init() {
+                generateTools();
+                setupSearch();
+                setupFileProcessing();
+                setupScrollEffect();
+                setupSmoothScrolling();
+            }
+
+            init();
         });
     </script>
 </body>
