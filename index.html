@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFMaster - सभी PDF टूल्स एक जगह</title>
+    <meta name="description" content="PDF कन्वर्ट, एडिट, मर्ज, स्प्लिट, कम्प्रेस और 20+ अन्य टूल्स - पूरी तरह मुफ्त">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS स्टाइलिंग */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* हेडर स्टाइल्स */
+        header {
+            background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav ul li a:hover {
+            border-bottom: 2px solid white;
+        }
+
+        /* हीरो सेक्शन */
+        .hero {
+            text-align: center;
+            padding: 5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover {
+            background: #ff5252;
+        }
+
+        /* टूल्स सेक्शन */
+        .tools-section {
+            padding: 4rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tools-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .category {
+            margin-bottom: 3rem;
+        }
+
+        .category h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #6e48aa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #6e48aa;
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #6e48aa;
+        }
+
+        .tool-card h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .tool-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* फीचर्स सेक्शन */
+        .features-section {
+            padding: 4rem 5%;
+            background: #f0f0f0;
+            text-align: center;
+        }
+
+        .features-section h2 {
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #6e48aa;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* फुटर स्टाइल्स */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .footer-section {
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            font-size: 1.2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #9d50bb;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 2rem;
+        }
+
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .search-box {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-box input,
+            .search-box button {
+                width: 100%;
+                border-radius: 0;
+                padding: 0.8rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML कंटेंट -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-file-pdf"></i> PDFMaster
+            </div>
+            <ul>
+                <li><a href="#all-tools">सभी टूल्स</a></li>
+                <li><a href="#features">फीचर्स</a></li>
+                <li><a href="#about">हमारे बारे में</a></li>
+            </ul>
+        </nav>
+        <div class="hero">
+            <h1>आपके PDF के लिए सभी समाधान</h1>
+            <p>20+ मुफ़्त टूल्स जो आपके PDF काम आसान बनाते हैं</p>
+            <div class="search-box">
+                <input type="text" placeholder="टूल खोजें...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <section id="all-tools" class="tools-section">
+        <h2><i class="fas fa-tools"></i> हमारे सभी PDF टूल्स</h2>
+        
+        <div class="category">
+            <h3><i class="fas fa-exchange-alt"></i> कन्वर्ट टूल्स</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-word"></i></div>
+                    <h3>PDF से Word</h3>
+                    <p>PDF को एडिट करने योग्य Word डॉक्यूमेंट में बदलें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-excel"></i></div>
+                    <h3>PDF से Excel</h3>
+                    <p>PDF टेबल्स को एडिटेबल Excel शीट में कन्वर्ट करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-powerpoint"></i></div>
+                    <h3>PDF से PPT</h3>
+                    <p>PDF को PowerPoint प्रेजेंटेशन में बदलें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-image"></i></div>
+                    <h3>PDF से JPG</h3>
+                    <p>PDF पेजों को इमेज फॉर्मेट में कन्वर्ट करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Word से PDF</h3>
+                    <p>Word डॉक्यूमेंट को PDF में बदलें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Excel से PDF</h3>
+                    <p>Excel शीट्स को PDF में कन्वर्ट करें</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h3><i class="fas fa-edit"></i> एडिट टूल्स</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-compress-alt"></i></div>
+                    <h3>PDF कम्प्रेस</h3>
+                    <p>PDF का साइज कम करें बिना क्वालिटी खोए</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-unlock"></i></div>
+                    <h3>PDF अनलॉक</h3>
+                    <p>पासवर्ड प्रोटेक्टेड PDF से सुरक्षा हटाएं</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-lock"></i></div>
+                    <h3>PDF प्रोटेक्ट</h3>
+                    <p>PDF को पासवर्ड से सुरक्षित करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-water"></i></div>
+                    <h3>वॉटरमार्क जोड़ें</h3>
+                    <p>PDF में टेक्स्ट या इमेज वॉटरमार्क जोड़ें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-signature"></i></div>
+                    <h3>PDF साइन</h3>
+                    <p>डिजिटल सिग्नेचर के साथ PDF साइन करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-eraser"></i></div>
+                    <h3>PDF एडिट</h3>
+                    <p>PDF में टेक्स्ट और इमेजेज एडिट करें</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h3><i class="fas fa-object-group"></i> संगठन टूल्स</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-merge"></i></div>
+                    <h3>PDF मर्ज</h3>
+                    <p>कई PDFs को एक फाइल में मिलाएं</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-cut"></i></div>
+                    <h3>PDF स्प्लिट</h3>
+                    <p>बड़े PDF को छोटे हिस्सों में विभाजित करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-sort-numeric-up"></i></div>
+                    <h3>PDF पेज ऑर्डर</h3>
+                    <p>PDF पेजों को रीअरेंज या डिलीट करें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-archive"></i></div>
+                    <h3>PDF एक्सट्रैक्ट</h3>
+                    <p>PDF से स्पेसिफिक पेज निकालें</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-columns"></i></div>
+                    <h3>PDF रोटेट</h3>
+                    <p>PDF पेजों को 90°, 180° या 270° घुमाएं</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-invoice"></i></div>
+                    <h3>PDF फॉर्म भरें</h3>
+                    <p>PDF फॉर्म्स को डिजिटली भरें और सेव करें</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features-section">
+        <h2><i class="fas fa-star"></i> हमारी खास बातें</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-lock"></i>
+                <h3>सुरक्षित</h3>
+                <p>आपकी फाइलें सिर्फ आप तक सीमित, स्वचालित रूप से डिलीट</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>तेज़</h3>
+                <p>क्लाउड बेस्ड प्रोसेसिंग जो सेकंड्स में काम करती है</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>मोबाइल फ्रेंडली</h3>
+                <p>किसी भी डिवाइस पर बिना ऐप के उपयोग करें</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>PDFMaster</h3>
+                <p>आपका सबसे विश्वसनीय PDF समाधान</p>
+            </div>
+            <div class="footer-section">
+                <h3>लिंक्स</h3>
+                <ul>
+                    <li><a href="#">प्राइवेसी पॉलिसी</a></li>
+                    <li><a href="#">टर्म्स ऑफ यूज़</a></li>
+                    <li><a href="#">संपर्क करें</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>सोशल मीडिया</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2023 PDFMaster. सर्वाधिकार सुरक्षित।</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript कोड -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // टूल कार्ड्स पर क्लिक इवेंट
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            toolCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const toolName = this.querySelector('h3').textContent;
+                    alert(`आपने "${toolName}" टूल सिलेक्ट किया है। डेवलपमेंट के दौरान यह फंक्शन अभी उपलब्ध नहीं है।`);
+                });
+            });
+            
+            // सर्च फंक्शनैलिटी
+            const searchInput = document.querySelector('.search-box input');
+            const searchButton = document.querySelector('.search-box button');
+            
+            searchButton.addEventListener('click', function() {
+                performSearch();
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                if (searchTerm === '') return;
+                
+                let found = false;
+                toolCards.forEach(card => {
+                    const toolTitle = card.querySelector('h3').textContent.toLowerCase();
+                    const toolDesc = card.querySelector('p').textContent.toLowerCase();
+                    
+                    if (toolTitle.includes(searchTerm) || toolDesc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        found = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                if (!found) {
+                    alert('कोई टूल नहीं मिला। कृपया अलग कीवर्ड आजमाएं।');
+                }
+            }
+            
+            // स्क्रॉल पर नेवबार स्टाइल बदलना
+            window.addEventListener('scroll', function() {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 50) {
+                    nav.style.background = 'rgba(110, 72, 170, 0.95)';
+                    nav.style.padding = '0.5rem 5%';
+                    nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                } else {
+                    nav.style.background = 'transparent';
+                    nav.style.padding = '1rem 5%';
+                    nav.style.boxShadow = 'none';
+                }
+            });
+            
+            // स्मूथ स्क्रॉलिंग
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
